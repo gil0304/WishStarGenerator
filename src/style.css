@@ -1,0 +1,308 @@
+:root {
+  --bg: #05060f;
+  --text: #eef0ff;
+  --text-dim: rgba(230, 235, 255, 0.6);
+  --line: rgba(150, 170, 255, 0.22);
+  --gold: #ffd37a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#canvas-container {
+  position: fixed;
+  inset: 0;
+}
+
+#canvas-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- 画面共通 ---------- */
+
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: opacity 0.5s ease;
+}
+
+.screen.hidden-screen {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.screen-bottom {
+  align-items: flex-end;
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+
+/* ---------- 入力画面 ---------- */
+
+.panel {
+  width: min(430px, 100%);
+  background: rgba(10, 14, 36, 0.62);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 32px 28px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.panel-header h1 {
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-align: center;
+}
+
+.star-mark {
+  color: var(--gold);
+  text-shadow: 0 0 12px rgba(255, 211, 122, 0.8);
+}
+
+.subtitle {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+}
+
+.field {
+  display: block;
+  margin-top: 26px;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+#wish-input {
+  width: 100%;
+  padding: 13px 14px;
+  font: inherit;
+  font-size: 16px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(150, 170, 255, 0.3);
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#wish-input::placeholder {
+  color: rgba(230, 235, 255, 0.32);
+}
+
+#wish-input:focus {
+  border-color: rgba(255, 211, 122, 0.65);
+  box-shadow: 0 0 0 3px rgba(255, 211, 122, 0.12);
+}
+
+.char-count {
+  display: block;
+  margin-top: 6px;
+  text-align: right;
+  font-size: 0.68rem;
+  color: rgba(230, 235, 255, 0.38);
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.category-chip {
+  --c: var(--gold);
+  padding: 8px 13px;
+  font: inherit;
+  font-size: 0.8rem;
+  color: rgba(238, 240, 255, 0.85);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(150, 170, 255, 0.28);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-chip.selected {
+  color: #fff;
+  border-color: var(--c);
+  background: color-mix(in srgb, var(--c) 20%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--c) 40%, transparent);
+}
+
+/* ---------- ボタン ---------- */
+
+button.primary {
+  width: 100%;
+  margin-top: 30px;
+  padding: 14px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #241a05;
+  background: linear-gradient(135deg, #ffe9ad, #ffc857);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(255, 200, 87, 0.32);
+  transition: transform 0.15s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+button.primary:disabled {
+  opacity: 0.35;
+  cursor: default;
+  box-shadow: none;
+}
+
+button.primary:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 30px rgba(255, 200, 87, 0.45);
+}
+
+button.ghost {
+  padding: 14px;
+  font: inherit;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid rgba(150, 170, 255, 0.38);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button.ghost:hover {
+  background: rgba(150, 170, 255, 0.1);
+}
+
+/* ---------- 生成演出（文字が光になる） ---------- */
+
+.dissolve {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-content: center;
+  padding: 0 32px;
+  pointer-events: none;
+  text-align: center;
+}
+
+.dissolve span {
+  display: inline-block;
+  font-size: 1.35rem;
+  letter-spacing: 0.06em;
+  white-space: pre;
+  color: #fff7e6;
+  text-shadow: 0 0 16px rgba(255, 230, 170, 0.9);
+  opacity: 0;
+  animation: char-dissolve 1.05s ease forwards;
+}
+
+@keyframes char-dissolve {
+  0% {
+    opacity: 0;
+    transform: none;
+    filter: none;
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-46px) scale(0.6);
+    filter: blur(8px);
+  }
+}
+
+/* ---------- 結果画面 ---------- */
+
+.result-panel {
+  width: min(430px, 100%);
+  padding: 22px 24px;
+  text-align: center;
+  background: rgba(10, 14, 36, 0.55);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.result-category {
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  color: rgba(230, 235, 255, 0.5);
+}
+
+.result-wish {
+  margin-top: 8px;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  text-shadow: 0 0 18px rgba(140, 160, 255, 0.8);
+  overflow-wrap: anywhere;
+}
+
+.result-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.result-actions button {
+  flex: 1;
+  margin-top: 0;
+}
+
+/* ---------- WebGL非対応時 ---------- */
+
+.webgl-error {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+  line-height: 1.9;
+  color: var(--text-dim);
+  background: var(--bg);
+}

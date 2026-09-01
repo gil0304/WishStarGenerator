@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Wish Star Generator</title>
+    <meta name="description" content="願いごとを、自分だけの星に変える七夕Web作品" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 5 L58 42 L95 50 L58 58 L50 95 L42 58 L5 50 L42 42 Z' fill='%23ffd76a'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <div id="canvas-container"></div>
+
+      <!-- 入力画面 -->
+      <section id="screen-input" class="screen">
+        <div class="panel">
+          <header class="panel-header">
+            <h1><span class="star-mark">✦</span> Wish Star Generator</h1>
+            <p class="subtitle">願いごとを、自分だけの星に。</p>
+          </header>
+
+          <label class="field">
+            <span class="field-label">願いごと（40文字まで）</span>
+            <input
+              id="wish-input"
+              type="text"
+              maxlength="40"
+              placeholder="例：今年こそ作品を完成させたい"
+              autocomplete="off"
+              enterkeyhint="go"
+            />
+            <span id="char-count" class="char-count">0 / 40</span>
+          </label>
+
+          <div class="field">
+            <span class="field-label">願いの種類</span>
+            <div id="category-list" class="categories" role="radiogroup" aria-label="願いの種類"></div>
+          </div>
+
+          <button id="generate-btn" class="primary" disabled>星を生成する</button>
+        </div>
+      </section>
+
+      <!-- 生成演出：文字が光になるオーバーレイ -->
+      <div id="dissolve" class="dissolve" aria-hidden="true"></div>
+
+      <!-- 結果画面 -->
+      <section id="screen-result" class="screen screen-bottom hidden-screen">
+        <div class="result-panel">
+          <p id="result-category" class="result-category"></p>
+          <p id="result-wish" class="result-wish"></p>
+          <div class="result-actions">
+            <button id="save-btn" class="primary">画像を保存</button>
+            <button id="again-btn" class="ghost">もう一度作る</button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
